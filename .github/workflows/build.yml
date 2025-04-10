@@ -26,7 +26,7 @@ jobs:
         run: npm install -g @ionic/cli
       - name: Build project
         working-directory: ./frontend
-        run: ionic build
+        run: ionic build -- --base-href /ProyectoPOI/
 
       - name: Run
         working-directory: ./frontend
@@ -58,6 +58,7 @@ jobs:
         working-directory: ./backend
         run: npm test
   deploy-frontend:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     needs: build-frontend
 
