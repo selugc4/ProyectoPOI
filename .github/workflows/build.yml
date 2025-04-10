@@ -43,9 +43,6 @@ jobs:
       - name: Install dependencies
         working-directory: ./backend
         run: npm ci
-      - name: Install Ionic CLI
-        working-directory: ./backend
-        run: npm install -g @ionic/cli
 
       - name: Run
         working-directory: ./backend
