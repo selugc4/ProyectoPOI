@@ -16,14 +16,15 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'
-
       - name: Install dependencies
         working-directory: ./frontend
         run: npm ci
-
+      - name: Install Ionic CLI
+        working-directory: ./frontend
+        run: npm install -g @ionic/cli
       - name: Build project
         working-directory: ./frontend
-        run: npx ionic build
+        run: ionic build
 
       - name: Run
         working-directory: ./frontend
