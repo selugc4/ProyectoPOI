@@ -29,9 +29,6 @@ jobs:
       - name: Run
         working-directory: ./frontend
         run: npm test -- --no-watch --browsers=ChromeHeadless
-      - name: Deploy
-        working-directory: ./frontend
-        run: npm run deploy
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
