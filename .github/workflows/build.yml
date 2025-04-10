@@ -29,7 +29,6 @@ jobs:
       - name: Run
         working-directory: ./frontend
         run: npm test -- --no-watch --browsers=ChromeHeadless
-jobs:
   build-backend:
     runs-on: ubuntu-latest
 
