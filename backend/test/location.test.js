@@ -31,7 +31,7 @@ describe('Rutas /locations', () => {
         Ownlng: -3.7040,
         Ownlat: 40.4170,
         image: 'https://example.com/image.jpg'
-      })
+      }, 10000)
       .expect(201)
       .then(res => {
         expect(res.body.name).toBe('Parque Central');
