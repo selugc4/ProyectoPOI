@@ -105,9 +105,9 @@ jobs:
       - name: Deploy to Azure Web App for Containers
         run: |
           az webapp config container set \
-            --name TWM \
-            --resource-group cnsa-2024-rg \
             --docker-custom-image-name $IMAGE_NAME \
+            --docker-registry-server-password ${{ secrets.AZURE_PASSWORD }}            
             --docker-registry-server-url https://repodocker.azurecr.io \
             --docker-registry-server-user ${{ secrets.AZURE_USERNAME }} \
-            --docker-registry-server-password ${{ secrets.AZURE_PASSWORD }}
+            --name TWM \
+            --resource-group cnsa-2024-rg \
