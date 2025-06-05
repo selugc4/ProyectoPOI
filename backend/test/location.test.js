@@ -93,9 +93,9 @@ describe('Rutas /locations', () => {
       .delete(`/locations/${createdLocationId}`) 
       .expect(404);
   });
-  test('GET /locationsApi?name=museum - resultados de Foursquare', () => {
+  test('GET /locationsApi?name=museum&lat=41.3851&lng=2.1734- resultados de Foursquare', () => {
     return request(app)
-      .get('/locationsApi?name=museum')
+      .get('/locationsApi?name=museum&lat=41.3851&lng=2.1734')
       .expect(200)
       .then(res => {
         expect(Array.isArray(res.body)).toBe(true);

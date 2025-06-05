@@ -9,7 +9,7 @@ const sendJSONresponse = (res, status, content) => {
 };
 const locationsReadByNameDatePlace = (req, res) => {
   const { name, date, region } = req.query;
-  const paramsUsed = [name, date, region].filter(Boolean); // cuenta cuántos filtros hay
+  const paramsUsed = [name, date, region].filter(Boolean); 
 
   if (paramsUsed.length > 1) {
     return sendJSONresponse(res, 400, {
@@ -19,12 +19,10 @@ const locationsReadByNameDatePlace = (req, res) => {
 
  const query = {};
 
-  // name: no se valida, se permite cualquier texto para búsqueda parcial
   if (name) {
     query.name = { $regex: name, $options: 'i' };
   }
 
-  // date: validación estricta
   if (date) {
     const dateObj = new Date(date);
     if (isNaN(dateObj.getTime())) {
@@ -166,28 +164,53 @@ const locationsUpdateOne = (req, res) => {
     });
 };
 const foursquareSearch = (req, res) => {
-  const { name, region } = req.query;
-  const paramsUsed = [name, region].filter(Boolean);
-  if (paramsUsed.length > 1) {
+  const { name, lat, lng } = req.query;
+
+  const hasCoords = lat && lng;
+  const hasName = !!name;
+
+  // Validación: ambos o ninguno
+  if ((lat && !lng) || (!lat && lng)) {
     return sendJSONresponse(res, 400, {
-      message: 'Proporciona solo uno de los siguientes parámetros: name o region. O ninguno para resultados por defecto.'
+      message: 'Debes proporcionar ambas coordenadas: lat y lng.'
     });
   }
 
-  // Validación opcional de región
-  if (region && !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(region)) {
+  // Validación: name requiere coords
+  if (hasName && !hasCoords) {
     return sendJSONresponse(res, 400, {
-      message: 'Región inválida. Solo se permiten letras y espacios.'
+      message: 'La búsqueda por nombre debe ir acompañada de coordenadas.'
     });
+  }
+
+  // Validación de coordenadas numéricas y rango
+  if (hasCoords) {
+    const latNum = parseFloat(lat);
+    const lngNum = parseFloat(lng);
+
+    if (isNaN(latNum) || isNaN(lngNum)) {
+      return sendJSONresponse(res, 400, {
+        message: 'Latitud y longitud deben ser números válidos.'
+      });
+    }
+
+    if (latNum < -90 || latNum > 90 || lngNum < -180 || lngNum > 180) {
+      return sendJSONresponse(res, 400, {
+        message: 'Latitud debe estar entre -90 y 90, longitud entre -180 y 180.'
+      });
+    }
   }
 
   const params = {
-    limit: 20
+    limit: 20,
+    sort: 'RATING'
   };
-  if (name) {
+
+  if (hasName && hasCoords) {
     params.query = name;
-  } else if (region) {
-    params.near = region;
+    params.ll = `${lat},${lng}`;
+  } else if (hasCoords) {
+    params.ll = `${lat},${lng}`;
   } else {
     params.near = 'Madrid';
   }
@@ -210,8 +233,6 @@ const foursquareSearch = (req, res) => {
     sendJSONresponse(res, 500, { message: 'Error al obtener datos desde Foursquare.', error: err });
   });
 };
-
-module.exports = { foursquareSearch };
 module.exports = {
   locationsReadByNameDatePlace,
   locationsCreate,

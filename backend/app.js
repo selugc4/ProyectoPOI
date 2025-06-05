@@ -1,4 +1,3 @@
-const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -39,10 +38,10 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
 app.use('/', indexRouter);
 
-app.use(function(req, res, next) {
+app.use(function(req, res) {
   res.status(404).json({ message: 'Not Found' });
 });
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res) {
   res.status(err.status || 500);
   res.json({
     message: err.message,
