@@ -87,7 +87,8 @@ jobs:
     needs: build-backend
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Login to Azure CLI
         uses: azure/login@v1
@@ -103,5 +104,10 @@ jobs:
 
       - name: Deploy to Azure Web App for Containers
         run: |
-          az webapp config container set --name TWM --resource-group cnsa-2024-rg \
-            --docker-custom-image-name $IMAGE_NAME
+          az webapp config container set \
+            --name TWM \
+            --resource-group cnsa-2024-rg \
+            --docker-custom-image-name $IMAGE_NAME \
+            --docker-registry-server-url https://repodocker.azurecr.io \
+            --docker-registry-server-user ${{ secrets.AZURE_USERNAME }} \
+            --docker-registry-server-password ${{ secrets.AZURE_PASSWORD }}
