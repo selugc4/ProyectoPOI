@@ -107,7 +107,7 @@ jobs:
           IMAGE_NAME=repodocker.azurecr.io/twm:${{ github.run_number }}
           az webapp config container set \
             --docker-custom-image-name $IMAGE_NAME \
-            --docker-registry-server-password ${{ secrets.AZURE_PASSWORD }}            
+            --docker-registry-server-password ${{ secrets.AZURE_PASSWORD }} \
             --docker-registry-server-url https://repodocker.azurecr.io \
             --docker-registry-server-user ${{ secrets.AZURE_USERNAME }} \
             --name TWM \
