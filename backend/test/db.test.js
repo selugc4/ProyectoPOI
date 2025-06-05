@@ -12,7 +12,6 @@ describe('Conexión a la base de datos', () => {
 
   test('Debe conectarse exitosamente a MongoDB con URI válida', async () => {
     const uriValida = dbURI;
-    console.log('Conectando a MongoDB con URI:', uriValida);
     await expect(mongoose.connect(uriValida, {
       useNewUrlParser: true,
       useUnifiedTopology: true
