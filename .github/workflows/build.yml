@@ -96,7 +96,7 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          IMAGE_NAME=repodocke.azurecr.io/TWM:${{ github.run_number }}
+          IMAGE_NAME=repodocker.azurecr.io/twm:${{ github.run_number }}
           docker build -t $IMAGE_NAME ./backend
           echo ${{ secrets.AZURE_PASSWORD }} | docker login repodocker.azurecr.io -u ${{ secrets.AZURE_USERNAME }} --password-stdin
           docker push $IMAGE_NAME
