@@ -1,20 +1,30 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Blank
+    <ion-title class="ion-text-center">
+      Bienvenido a <strong>POI App</strong>
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+  <ion-tabs>
+    <ion-tab-bar slot="bottom">
+      <ion-tab-button tab="search">
+        <ion-icon name="search"></ion-icon>
+        <ion-label>Encuentra lugares</ion-label>
+      </ion-tab-button>
+      <ion-tab-button tab="list">
+        <ion-icon name="list"></ion-icon>
+        <ion-label>Lugares preferidos</ion-label>
+      </ion-tab-button>
+      <ion-tab-button tab="register">
+        <ion-icon name="person"></ion-icon>
+        <ion-label>Regístrate</ion-label>
+      </ion-tab-button>
+      <ion-tab-button tab="login">
+        <ion-icon name="log-in"></ion-icon>
+        <ion-label>Inicia sesión</ion-label>
+      </ion-tab-button>
+    </ion-tab-bar>
+  </ion-tabs>
 </ion-content>

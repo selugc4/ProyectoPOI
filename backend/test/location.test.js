@@ -106,4 +106,40 @@ describe('Rutas /locations', () => {
       .get('/locationsApi?name=foo&region=bar')
       .expect(400);
   });
+  test('debe devolver la location si el id es válido y existe', async () => {
+    const locData = {
+      name: 'Lugar Test',
+      address: 'Calle Test 123',
+      locality: 'Testville',
+      region: 'TestRegion',
+      country: 'Testland',
+      Otherlng: -3.7,
+      Otherlat: 40.4,
+      Ownlng: -3.7,
+      Ownlat: 40.4,
+      image: 'https://example.com/test.jpg'
+    };
+    const resCreate = await request(app)
+      .post('/locations/')
+      .send(locData)
+      .expect(201);
+
+    const id = resCreate.body._id;
+    const res = await request(app)
+      .get(`/locations/${id}`)
+      .expect(200);
+
+    expect(res.body).toHaveProperty('name', 'Lugar Test');
+    await request(app)
+      .delete(`/locations/${id}`)
+      .expect(204);
+  }, 20000);
+
+  test('debe devolver 404 si la location no existe', () => {
+    const fakeId = '507f1f77bcf86cd799439011';
+
+    return request(app)
+      .get(`/locations/${fakeId}`)
+      .expect(404);
+  });
 });

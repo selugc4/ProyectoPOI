@@ -56,6 +56,24 @@ const locationsReadByNameDatePlace = (req, res) => {
         sendJSONresponse(res, 500, { message: 'Error al buscar locations', error: err });
     });
 };
+const locationById = (req, res) => {
+  const locationid = req.params.locationid;
+
+  if (!locationid) {
+    return sendJSONresponse(res, 400, { message: 'Falta el parámetro id' });
+  }
+
+  Loc.findById(locationid).exec()
+    .then(location => {
+      if (!location) {
+        return sendJSONresponse(res, 404, { message: 'Location no encontrada' });
+      }
+      sendJSONresponse(res, 200, location);
+    })
+    .catch(err => {
+      sendJSONresponse(res, 500, { message: 'Error al buscar la location', error: err });
+    });
+};
 const locationsCreate = (req, res) => {
   Loc.create({
     name: req.body.name,
@@ -235,6 +253,7 @@ const foursquareSearch = (req, res) => {
 };
 module.exports = {
   locationsReadByNameDatePlace,
+  locationById,
   locationsCreate,
   locationsCreateMany,
   locationsDeleteOne,

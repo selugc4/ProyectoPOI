@@ -9,6 +9,7 @@ router.post('/locations/many', ctrlLocations.locationsCreateMany);
 router.delete('/locations/:locationid', ctrlLocations.locationsDeleteOne);
 router.put('/locations/:locationid', ctrlLocations.locationsUpdateOne);
 router.get('/locationsApi/', ctrlLocations.foursquareSearch);
+router.get('/locations/:locationid', ctrlLocations.locationById);
 
 router.get('/locations/:locationid/reviews', ctrlReviews.getReviewsByLocationId);
 router.post('/locations/:locationid/reviews', ctrlReviews.addReview);
