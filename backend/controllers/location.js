@@ -81,6 +81,7 @@ const locationsCreate = (req, res) => {
     locality: req.body.locality,
     region: req.body.region,
     country: req.body.country,
+    fsq_id: req.body.fsq_id,
     locationCoords: {
       type: 'Point',
       coordinates: [parseFloat(req.body.Otherlng), parseFloat(req.body.Otherlat)]
@@ -103,6 +104,7 @@ const locationsCreateMany = (req, res) => {
     locality: loc.locality,
     region: loc.region,
     country: loc.country,
+    fsq_id: loc.fsq_id,
     locationCoords: {
       type: 'Point',
       coordinates: [parseFloat(loc.Otherlng), parseFloat(loc.Otherlat)]
@@ -181,27 +183,24 @@ const locationsUpdateOne = (req, res) => {
       }
     });
 };
-const foursquareSearch = (req, res) => {
+const foursquareSearch = async (req, res) => {
   const { name, lat, lng } = req.query;
 
   const hasCoords = lat && lng;
   const hasName = !!name;
 
-  // Validación: ambos o ninguno
   if ((lat && !lng) || (!lat && lng)) {
     return sendJSONresponse(res, 400, {
       message: 'Debes proporcionar ambas coordenadas: lat y lng.'
     });
   }
 
-  // Validación: name requiere coords
   if (hasName && !hasCoords) {
     return sendJSONresponse(res, 400, {
       message: 'La búsqueda por nombre debe ir acompañada de coordenadas.'
     });
   }
 
-  // Validación de coordenadas numéricas y rango
   if (hasCoords) {
     const latNum = parseFloat(lat);
     const lngNum = parseFloat(lng);
@@ -233,23 +232,35 @@ const foursquareSearch = (req, res) => {
     params.near = 'Madrid';
   }
 
-  axios.get('https://api.foursquare.com/v3/places/search', {
-    headers: {
-      Authorization: apiKey
-    },
-    params
-  })
-  .then(response => {
+  try {
+    const response = await axios.get('https://api.foursquare.com/v3/places/search', {
+      headers: {
+        Authorization: apiKey
+      },
+      params
+    });
+
     const lugares = response.data.results;
+
     if (!lugares || lugares.length === 0) {
       return sendJSONresponse(res, 404, { message: 'No se encontraron lugares para ese criterio.' });
     }
-    sendJSONresponse(res, 200, lugares);
-  })
-  .catch(err => {
+
+    const fsqIds = lugares.map(l => l.fsq_id);
+
+    const existingLocs = await Loc.find({ fsq_id: { $in: fsqIds } }).select('fsq_id').lean();
+    const existingFsqIds = existingLocs.map(loc => loc.fsq_id);
+    const nuevosLugares = lugares.filter(l => !existingFsqIds.includes(l.fsq_id));
+
+    if (!nuevosLugares || nuevosLugares.length === 0) {
+      return sendJSONresponse(res, 404, { message: 'No se encontraron lugares para ese criterio.' });
+    }
+
+    return sendJSONresponse(res, 200, nuevosLugares);
+  } catch (err) {
     console.error('Error al consultar Foursquare:', err.message);
     sendJSONresponse(res, 500, { message: 'Error al obtener datos desde Foursquare.', error: err });
-  });
+  }
 };
 module.exports = {
   locationsReadByNameDatePlace,

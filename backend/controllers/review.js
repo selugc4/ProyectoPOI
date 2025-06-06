@@ -15,7 +15,10 @@ const getReviewsByLocationId = (req, res) => {
       if (!location) {
         return sendJSONresponse(res, 404, { message: 'Location no encontrada.' });
       }
-      sendJSONresponse(res, 200, location?.reviews || []);
+      const reviews = (location.reviews || []).sort((a, b) => {
+        return new Date(b.createdOn) - new Date(a.createdOn); // más reciente primero
+      });
+      sendJSONresponse(res, 200, reviews || []);
     })
     .catch(err => {
       sendJSONresponse(res, 500, {

@@ -1,4 +1,5 @@
 export interface ShortLocation {
+  _id: string;
   name: string;
   address: string;
   locality: string;

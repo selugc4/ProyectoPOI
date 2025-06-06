@@ -5,9 +5,48 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">search</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="search-container">
+    <h3><strong>Busca unos POI concretos</strong>, recuerda que solo puedes realizar la búsqueda sin parámetros o con uno de los tres parámetros</h3>
+    <ion-item>
+      <ion-label position="stacked">Nombre</ion-label>
+      <ion-input type="text" name="name" [(ngModel)]="name" ngDefaultControl></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Fecha (YYYY-MM-DD)</ion-label>
+      <ion-input type="date" name="date" [(ngModel)]="date" ngDefaultControl></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Región</ion-label>
+      <ion-input type="text" name="region" [(ngModel)]="region" ngDefaultControl></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" (click)="search()">Buscar</ion-button>
+
+    <ion-text color="danger" *ngIf="errorMessage">
+      <p>{{ errorMessage }}</p>
+    </ion-text>
+  </div>
+  <ion-grid>
+    <ion-row>
+      @for(location of locations; track location._id) {
+        <ion-col size="6">
+          <ion-card class="location-card" (click)="openLocationDetail(location._id)">
+            <ion-row>
+              <ion-col size="5">
+                <img [src]="location.image || 'assets/LocationDefault.png'" class="location-image"><img>
+              </ion-col>
+              <ion-col size="7" class="location-details">
+                <ion-card-title>{{ location.name }}</ion-card-title>
+                <p class="address">{{ location.address || 'Dirección no disponible'  }}</p>
+                <p class="locality">{{ location.locality }}</p>
+                <p class="country">{{ location.country }}</p>
+              </ion-col>
+            </ion-row>
+          </ion-card>
+        </ion-col>
+      }
+    </ion-row>
+  </ion-grid>
 </ion-content>

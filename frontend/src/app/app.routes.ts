@@ -26,6 +26,10 @@ export const routes: Routes = [
           import('./login/login.page').then(m => m.LoginPage),
       },
       {
+        path: 'location-detail/:id',
+        loadComponent: () => import('./location-detail/location-detail.page').then( m => m.LocationDetailPage)
+      },
+      {
         path: '',
         redirectTo: 'search',
         pathMatch: 'full',

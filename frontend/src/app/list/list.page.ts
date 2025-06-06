@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonCard, IonCardHeader, IonCardContent, IonCardTitle} from '@ionic/angular/standalone';
 import { ShortLocation } from '../models/short-location';
 import { LocationsService } from '../services/locations.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list',
@@ -16,6 +17,7 @@ export class ListPage implements OnInit {
 
   locations: ShortLocation[] = [];
   locationsService: LocationsService = inject(LocationsService);
+  router: Router = inject(Router);
   constructor() { }
 
   ngOnInit() {
@@ -30,5 +32,8 @@ export class ListPage implements OnInit {
           console.error('Error al cargar locations:', err);
         }
       });
+  }
+  openLocationDetail(id: string) {
+    this.router.navigate(['/location-detail', id]);
   }
 }

@@ -86,8 +86,7 @@ ion-input, ion-textarea, ion-searchbar {
   --padding-end: 12px;
   --padding-top: 10px;
   --padding-bottom: 10px;
-  --background: #ffffff;
-  border: 1px solid #ccc;
+  border: 1px solid #3a5f8a;
   border-radius: 12px;
   margin: 8px 0;
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
@@ -99,6 +98,8 @@ ion-searchbar {
   border-radius: 16px;
 }
 ion-card {
+  --background: #e6f2ff;
+  color: #023e8a;
   border-radius: 16px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.08);
   margin: 16px;

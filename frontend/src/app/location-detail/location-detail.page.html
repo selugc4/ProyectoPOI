@@ -1,0 +1,93 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>location-detail</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="!loading; else loadingTpl" fullscreen>
+  <ion-card class="search-container" *ngIf="location; else errorTpl">
+    <img [src]="location.image || 'assets/default.jpg'" alt="Imagen de {{ location.name }}" />
+    <ion-card-header>
+      <ion-card-title>{{ location.name }}</ion-card-title>
+      <ion-card-subtitle>{{ location.address || 'Dirección no disponible' }}</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p><strong>Localidad:</strong> {{ location.locality }}</p>
+      <p><strong>Región:</strong> {{ location.region }}</p>
+      <p><strong>País:</strong> {{ location.country }}</p>
+      <p><strong>Coordenadas ubicación:</strong> {{ locationCoordsString }}</p>
+      <p><strong>Coordenadas propias:</strong> {{  ownCoordsString }}</p>
+      <p><strong>Fecha:</strong> {{ location.date }}</p>
+    </ion-card-content>
+  </ion-card>
+    <ion-card class="review-card">
+      <ion-card-header>
+        <ion-row class="review-header">
+          <ion-title>¡Agrega un nuevo comentario al POI!</ion-title>
+        </ion-row>
+        <ion-row class="review-header">
+          <ion-col>
+            <ion-input
+              placeholder="Nombre del autor"
+              [(ngModel)]="review.author"
+              class="review-author-input" ngDefaultControl>
+            </ion-input>
+          </ion-col>
+          <ion-col size="auto" class="review-rating">
+            <ion-button
+              fill="clear"
+              *ngFor="let star of [1, 2, 3, 4, 5]"
+              (click)="review.rating = star">
+              <ion-icon
+                [name]="star <= review.rating ? 'star' : 'star-outline'">
+              </ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-textarea
+          placeholder="Escribe tu comentario"
+          [(ngModel)]="review.reviewText"
+          class="review-text-input" ngDefaultControl>
+        </ion-textarea>
+        <ion-button class="centered-button" (click)="submitReview()">Comentar</ion-button>
+      </ion-card-content>
+    </ion-card>
+  <ion-list *ngIf="location?.reviews?.length">
+    <ion-list-header>
+      <ion-title><strong>Comentarios</strong></ion-title>
+    </ion-list-header>
+    @for(review of location.reviews; track review._id) {
+      <ion-card class="review-card">
+        <ion-card-header>
+          <ion-row class="review-header">
+            <ion-col>
+              <h2 class="review-author">{{ review.author }}</h2>
+              <p class="review-date">{{ review.createdOn | date:'longDate' }}</p>
+            </ion-col>
+            <ion-col size="auto" class="review-rating">
+              <ion-icon name="star" *ngFor="let star of [].constructor(review.rating)"></ion-icon>
+            </ion-col>
+          </ion-row>
+        </ion-card-header>
+
+        <ion-card-content>
+          <p class="review-text">{{ review.reviewText }}</p>
+        </ion-card-content>
+      </ion-card>
+    }
+  </ion-list>
+  <h1 class="centered-template" *ngIf="location && !location.reviews?.length"><strong>No hay comentarios disponibles</strong></h1>
+</ion-content>
+
+<ng-template #loadingTpl class="centered-template">
+  <ion-spinner name="crescent"></ion-spinner>
+  <p>Cargando...</p>
+</ng-template>
+
+<ng-template #errorTpl class="centered-template">
+  <p color="danger">{{ errorMessage || 'Ubicación no encontrada.' }}</p>
+</ng-template>

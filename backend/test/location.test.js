@@ -117,7 +117,7 @@ describe('Rutas /locations', () => {
       Otherlat: 40.4,
       Ownlng: -3.7,
       Ownlat: 40.4,
-      image: 'https://example.com/test.jpg'
+      image: 'https://cdn-icons-png.flaticon.com/512/15/15470.png'
     };
     const resCreate = await request(app)
       .post('/locations/')
