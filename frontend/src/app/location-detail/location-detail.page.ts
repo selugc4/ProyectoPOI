@@ -11,6 +11,9 @@ import { ChangeDetectorRef } from '@angular/core';
 import { filter } from 'rxjs';
 import { ReviewToSend } from '../models/review-to-send';
 import { ToastController } from '@ionic/angular';
+import { Auth } from '@angular/fire/auth';
+import { AuthService } from '../services/auth.service';
+import { ReviewToSendLogged } from '../models/review-to-send-logged';
 
 @Component({
   selector: 'app-location-detail',
@@ -24,6 +27,7 @@ export class LocationDetailPage implements OnInit {
   changeDetectorRef = inject(ChangeDetectorRef);
   router: Router = inject(Router);
   toastController = inject(ToastController);
+  logged = false;
   location: LongLocation = {
     _id: '',
     name: '',
@@ -43,10 +47,18 @@ export class LocationDetailPage implements OnInit {
     rating: 0,
     reviewText: '',
   };
+  reviewLog: ReviewToSendLogged = {
+    author: '',
+    rating: 0,
+    Ownlng: 0,
+    Ownlat: 0,
+    reviewText: ''
+  };
   loading = true;
   errorMessage = '';
   private route = inject(ActivatedRoute);
   private locationsService = inject(LocationsService);
+  authService: AuthService = inject(AuthService);
   constructor() {
     addIcons({
       star: star,
@@ -62,6 +74,9 @@ export class LocationDetailPage implements OnInit {
           this.resetReviewForm();
         }
       });
+    this.authService['user$'].subscribe(user => {
+      this.logged = !!user;
+    });
     this.locationId = this.route.snapshot.paramMap.get('id')!;
     this.fetchLocation();
   }
@@ -85,28 +100,54 @@ get ownCoordsString(): string {
     });
   }
   submitReview() {
-    if (!this.review.author || !this.review.reviewText || this.review.rating <= 0) {
+    if (!this.logged && (!this.review.author || !this.review.reviewText || this.review.rating <= 0)) {
       this.showToast('Por favor, completa todos los campos del comentario', 'warning');
       return;
     }
-    this.locationsService.addReview(this.locationId, this.review).subscribe({
-      next: (response) => {
-        console.log('Review insertada:', response);
-        this.showToast('Comentario enviado con éxito');
-        this.resetReviewForm();
-        this.fetchLocation();
-      },
-      error: (err) => {
-        console.error('Error al insertar review:', err);
-        this.showToast('Error al enviar comentario', 'danger');
-      }
-    });
+    else if (this.logged && (!this.reviewLog.author || !this.reviewLog.reviewText || this.reviewLog.rating <= 0 || !this.location.ownCoords?.coordinates)) {
+      this.showToast('Por favor, completa todos los campos del comentario', 'warning');
+      return;
+    }
+    if(!this.logged) {
+      this.locationsService.addReview(this.locationId, this.review).subscribe({
+        next: (response) => {
+          console.log('Review insertada:', response);
+          this.showToast('Comentario enviado con éxito');
+          this.resetReviewForm();
+          this.fetchLocation();
+        },
+        error: (err) => {
+          console.error('Error al insertar review:', err);
+          this.showToast('Error al enviar comentario', 'danger');
+        }
+      });
+    }
+    else{
+      this.reviewLog.Ownlng = 10;
+      this.reviewLog.Ownlat = -10;
+      console.log('Review a enviar:', this.reviewLog);
+      this.locationsService.addReviewLogged(this.locationId, this.reviewLog).subscribe({
+        next: (response) => {
+          console.log('Review insertada:', response);
+          this.showToast('Comentario enviado con éxito');
+          this.resetReviewForm();
+          this.fetchLocation();
+        },
+        error: (err) => {
+          console.error('Error al insertar review:', err);
+          this.showToast('Error al enviar comentario', 'danger');
+        }
+      });
+    }
   }
   resetReviewForm() {
     console.log('Reseteando formulario');
     this.review.author = '';
     this.review.reviewText = '';
     this.review.rating = 0;
+    this.reviewLog.author = '';
+    this.reviewLog.reviewText = '';
+    this.reviewLog.rating = 0;
     this.changeDetectorRef.detectChanges();
   }
   async showToast(message: string, color: string = 'success') {

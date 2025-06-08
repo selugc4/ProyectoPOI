@@ -29,7 +29,7 @@ export class SearchPage implements OnInit {
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(event => {
         const currentRoute = (event as NavigationEnd).url;
-        if (!currentRoute.startsWith('/location-detail')) {
+        if (!currentRoute.startsWith('/search')) {
           this.resetFields();
         }
       });

@@ -7,24 +7,44 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-tabs>
-    <ion-tab-bar slot="bottom">
-      <ion-tab-button tab="search">
-        <ion-icon name="search"></ion-icon>
-        <ion-label>Encuentra lugares</ion-label>
-      </ion-tab-button>
-      <ion-tab-button tab="list">
-        <ion-icon name="list"></ion-icon>
-        <ion-label>Lugares preferidos</ion-label>
-      </ion-tab-button>
-      <ion-tab-button tab="register">
-        <ion-icon name="person"></ion-icon>
-        <ion-label>Regístrate</ion-label>
-      </ion-tab-button>
-      <ion-tab-button tab="login">
-        <ion-icon name="log-in"></ion-icon>
-        <ion-label>Inicia sesión</ion-label>
-      </ion-tab-button>
-    </ion-tab-bar>
-  </ion-tabs>
+  @if(!logged){
+    <ion-tabs>
+      <ion-tab-bar slot="bottom">
+        <ion-tab-button tab="search">
+          <ion-icon name="search"></ion-icon>
+          <ion-label>Encuentra lugares</ion-label>
+        </ion-tab-button>
+        <ion-tab-button tab="list">
+          <ion-icon name="list"></ion-icon>
+          <ion-label>Lugares preferidos</ion-label>
+        </ion-tab-button>
+        <ion-tab-button tab="register">
+          <ion-icon name="person"></ion-icon>
+          <ion-label>Regístrate</ion-label>
+        </ion-tab-button>
+        <ion-tab-button tab="login">
+          <ion-icon name="log-in"></ion-icon>
+          <ion-label>Inicia sesión</ion-label>
+        </ion-tab-button>
+      </ion-tab-bar>
+    </ion-tabs>
+  }
+  @else {
+    <ion-tabs>
+      <ion-tab-bar slot="bottom">
+        <ion-tab-button tab="search">
+          <ion-icon name="search"></ion-icon>
+          <ion-label>Encuentra lugares</ion-label>
+        </ion-tab-button>
+        <ion-tab-button tab="list">
+          <ion-icon name="list"></ion-icon>
+          <ion-label>Lugares preferidos</ion-label>
+        </ion-tab-button>
+        <ion-tab-button (click)="logout()">
+          <ion-icon name="log-out"></ion-icon>
+          <ion-label>Cierra sesión</ion-label>
+        </ion-tab-button>
+      </ion-tab-bar>
+    </ion-tabs>
+  }
 </ion-content>

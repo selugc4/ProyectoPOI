@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { ShortLocation } from '../models/short-location';
 import { LongLocation } from '../models/long-location';
 import { ReviewToSend } from '../models/review-to-send';
+import { ReviewToSendLogged } from '../models/review-to-send-logged';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,10 @@ export class LocationsService {
     return this.http.get<LongLocation>(`${this.baseUrl}${id}`);
   }
   addReview(locationId: string, review: ReviewToSend): Observable<any> {
+    const url = `${this.baseUrl}${locationId}/reviews`;
+    return this.http.post(url, review);
+  }
+  addReviewLogged(locationId: string, review: ReviewToSendLogged): Observable<any> {
     const url = `${this.baseUrl}${locationId}/reviews`;
     return this.http.post(url, review);
   }

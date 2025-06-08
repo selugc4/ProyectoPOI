@@ -36,16 +36,22 @@ const addReview = (req, res) => {
       if (!location) {
         return sendJSONresponse(res, 404, { message: 'Location no encontrada.' });
       }
+      const { author, rating, reviewText, Ownlng, Ownlat } = req.body;
 
-      const { author, rating, reviewText } = req.body;
-
-      location.reviews.push({
+      const reviewData = {
         author,
         rating,
         reviewText,
         createdOn: new Date()
-      });
+      };
+      if (Ownlng !== undefined && Ownlat !== undefined) {
+        reviewData.ownCoords = {
+          type: 'Point',
+          coordinates: [parseFloat(Ownlng), parseFloat(Ownlat)]
+        };
+      }
 
+      location.reviews.push(reviewData);
       return location.save();
     })
     .then(updatedLocation => {

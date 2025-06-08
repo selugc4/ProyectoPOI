@@ -28,31 +28,60 @@
         </ion-row>
         <ion-row class="review-header">
           <ion-col>
-            <ion-input
-              placeholder="Nombre del autor"
-              [(ngModel)]="review.author"
-              class="review-author-input" ngDefaultControl>
-            </ion-input>
+            @if(!logged){
+              <ion-input
+                placeholder="Nombre del autor"
+                [(ngModel)]="review.author"
+                class="review-author-input" ngDefaultControl>
+              </ion-input>
+            }
+            @else {
+              <ion-input
+                placeholder="Nombre del autor"
+                [(ngModel)]="reviewLog.author"
+                class="review-author-input" ngDefaultControl>
+              </ion-input>
+            }
           </ion-col>
           <ion-col size="auto" class="review-rating">
-            <ion-button
-              fill="clear"
-              *ngFor="let star of [1, 2, 3, 4, 5]"
-              (click)="review.rating = star">
-              <ion-icon
-                [name]="star <= review.rating ? 'star' : 'star-outline'">
-              </ion-icon>
-            </ion-button>
+            @if(!logged){
+              <ion-button
+                fill="clear"
+                *ngFor="let star of [1, 2, 3, 4, 5]"
+                (click)="review.rating = star">
+                <ion-icon
+                  [name]="star <= review.rating ? 'star' : 'star-outline'">
+                </ion-icon>
+              </ion-button>
+            }
+            @else{
+              <ion-button
+                fill="clear"
+                *ngFor="let star of [1, 2, 3, 4, 5]"
+                (click)="reviewLog.rating = star">
+                <ion-icon
+                  [name]="star <= reviewLog.rating ? 'star' : 'star-outline'">
+                </ion-icon>
+              </ion-button>
+            }
           </ion-col>
         </ion-row>
       </ion-card-header>
-
       <ion-card-content>
-        <ion-textarea
-          placeholder="Escribe tu comentario"
-          [(ngModel)]="review.reviewText"
-          class="review-text-input" ngDefaultControl>
-        </ion-textarea>
+        @if(!logged){
+          <ion-textarea
+            placeholder="Escribe tu comentario"
+            [(ngModel)]="review.reviewText"
+            class="review-text-input" ngDefaultControl>
+          </ion-textarea>
+        }
+        @else{
+          <ion-textarea
+            placeholder="Escribe tu comentario"
+            [(ngModel)]="reviewLog.reviewText"
+            class="review-text-input" ngDefaultControl>
+          </ion-textarea>
+        }
         <ion-button class="centered-button" (click)="submitReview()">Comentar</ion-button>
       </ion-card-content>
     </ion-card>
