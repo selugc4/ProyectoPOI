@@ -1,10 +1,12 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ShortLocation } from '../models/short-location';
 import { LongLocation } from '../models/long-location';
 import { ReviewToSend } from '../models/review-to-send';
 import { ReviewToSendLogged } from '../models/review-to-send-logged';
+import { LocationToSend } from '../models/location-to-send';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +14,7 @@ import { ReviewToSendLogged } from '../models/review-to-send-logged';
 export class LocationsService {
   private baseUrl = 'https://twm-a0gahqe6exa7fxh6.westeurope-01.azurewebsites.net/locations/';
   private http = inject(HttpClient);
+  private authService = inject(AuthService);
   getAllLocations(): Observable<ShortLocation[]> {
     return this.http.get<ShortLocation[]>(this.baseUrl);
   }
@@ -39,5 +42,23 @@ export class LocationsService {
   addReviewLogged(locationId: string, review: ReviewToSendLogged): Observable<any> {
     const url = `${this.baseUrl}${locationId}/reviews`;
     return this.http.post(url, review);
+  }
+  deleteReview(locationId: string, reviewId: string): Observable<any> {
+    const token = this.authService.getFirebaseIdToken();
+    const url = `${this.baseUrl}${locationId}/reviews/${reviewId}`;
+    const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : undefined;
+    return this.http.delete(url, { headers });
+  }
+  updateLocation(location: LocationToSend, location_id: string): Observable<LocationToSend> {
+    const token = this.authService.getFirebaseIdToken();
+    const url = `${this.baseUrl}${location_id}`;
+    const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : undefined;
+    return this.http.put<LocationToSend>(url, location, { headers });
+  }
+  deleteLocation(id: string) {
+    const token = this.authService.getFirebaseIdToken();
+    const url = `${this.baseUrl}${id}`;
+    const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : undefined;
+    return this.http.delete(url, { headers });
   }
 }

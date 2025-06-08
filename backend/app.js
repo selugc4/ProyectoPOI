@@ -14,6 +14,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
 const swaggerOptions = {
   definition: {
     openapi: '3.0.0',

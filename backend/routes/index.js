@@ -2,18 +2,19 @@ const express = require('express');
 const router = express.Router();
 const ctrlLocations = require('../controllers/location');
 const ctrlReviews = require('../controllers/review');
+const authorizeJWT = require('../auth');
 
 router.get('/locations/', ctrlLocations.locationsReadByNameDatePlace);
-router.post('/locations/', ctrlLocations.locationsCreate);
-router.post('/locations/many', ctrlLocations.locationsCreateMany);
-router.delete('/locations/:locationid', ctrlLocations.locationsDeleteOne);
-router.put('/locations/:locationid', ctrlLocations.locationsUpdateOne);
-router.get('/locationsApi/', ctrlLocations.foursquareSearch);
+router.post('/locations/', authorizeJWT, ctrlLocations.locationsCreate);
+router.post('/locations/many', authorizeJWT, ctrlLocations.locationsCreateMany);
+router.delete('/locations/:locationid', authorizeJWT, ctrlLocations.locationsDeleteOne);
+router.put('/locations/:locationid', authorizeJWT, ctrlLocations.locationsUpdateOne);
+router.get('/locationsApi/', authorizeJWT, ctrlLocations.foursquareSearch);
 router.get('/locations/:locationid', ctrlLocations.locationById);
 
 router.get('/locations/:locationid/reviews', ctrlReviews.getReviewsByLocationId);
 router.post('/locations/:locationid/reviews', ctrlReviews.addReview);
-router.delete('/locations/:locationid/reviews/:reviewid', ctrlReviews.deleteReview);
+router.delete('/locations/:locationid/reviews/:reviewid', authorizeJWT, ctrlReviews.deleteReview);
 module.exports = router;
 /**
  * @swagger

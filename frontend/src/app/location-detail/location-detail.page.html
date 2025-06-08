@@ -5,20 +5,93 @@
 </ion-header>
 
 <ion-content *ngIf="!loading; else loadingTpl" fullscreen>
-  <ion-card class="search-container" *ngIf="location; else errorTpl">
-    <img [src]="location.image || 'assets/default.jpg'" alt="Imagen de {{ location.name }}" />
-    <ion-card-header>
-      <ion-card-title>{{ location.name }}</ion-card-title>
-      <ion-card-subtitle>{{ location.address || 'Dirección no disponible' }}</ion-card-subtitle>
-    </ion-card-header>
+  <ion-card>
+      <ion-card-header>
+        <ion-card-title>Detalles de la ubicación</ion-card-title>
+        @if(logged){
+          <ion-button (click)="toggleEditing()">
+            {{ editing ? 'Cancelar' : 'Editar' }}
+          </ion-button>
+          <ion-button *ngIf="editing" (click)="saveLocation()" [disabled]="!isValid()">
+            Guardar
+          </ion-button>
+          <ion-button color="danger" (click)="deleteLocation()">
+            Eliminar
+          </ion-button>
+        }
+      </ion-card-header>
 
     <ion-card-content>
-      <p><strong>Localidad:</strong> {{ location.locality }}</p>
-      <p><strong>Región:</strong> {{ location.region }}</p>
-      <p><strong>País:</strong> {{ location.country }}</p>
-      <p><strong>Coordenadas ubicación:</strong> {{ locationCoordsString }}</p>
-      <p><strong>Coordenadas propias:</strong> {{  ownCoordsString }}</p>
-      <p><strong>Fecha:</strong> {{ location.date }}</p>
+      <div class="image-wrapper">
+        <img [src]="location.image || 'assets/LocationDefault.png'" class="location-image"><img>
+      </div>
+      <ion-item>
+        <ion-label position="stacked">Nombre *</ion-label>
+        <ion-input [readonly]="!editing" [(ngModel)]="location.name" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Dirección</ion-label>
+        <ion-input [readonly]="!editing" [(ngModel)]="location.address"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Localidad *</ion-label>
+        <ion-input [readonly]="!editing" [(ngModel)]="location.locality" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Región *</ion-label>
+        <ion-input [readonly]="!editing" [(ngModel)]="location.region" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">País *</ion-label>
+        <ion-input [readonly]="!editing" [(ngModel)]="location.country" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Coordenadas (lng, lat) *</ion-label>
+        <ion-input
+          [readonly]="!editing"
+          [(ngModel)]="location.locationCoords.coordinates[0]"
+          type="number"
+          placeholder="Longitud"
+          required
+        ></ion-input>
+        <ion-input
+          [readonly]="!editing"
+          [(ngModel)]="location.locationCoords.coordinates[1]"
+          type="number"
+          placeholder="Latitud"
+          required
+        ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Coordenadas propias (lng, lat) *</ion-label>
+        <ion-input
+          [readonly]="!editing"
+          [(ngModel)]="location.ownCoords.coordinates[0]"
+          type="number"
+          placeholder="Longitud"
+          required
+        ></ion-input>
+        <ion-input
+          [readonly]="!editing"
+          [(ngModel)]="location.ownCoords.coordinates[1]"
+          type="number"
+          placeholder="Latitud"
+          required
+        ></ion-input>
+      </ion-item>
+
+      @if(editing){
+        <ion-item>
+          <ion-label position="stacked">Imagen URL *</ion-label>
+          <ion-input [readonly]="!editing" [(ngModel)]="location.image" required type="url"></ion-input>
+        </ion-item>
+      }
     </ion-card-content>
   </ion-card>
     <ion-card class="review-card">
@@ -100,6 +173,13 @@
             <ion-col size="auto" class="review-rating">
               <ion-icon name="star" *ngFor="let star of [].constructor(review.rating)"></ion-icon>
             </ion-col>
+            @if(logged){
+              <ion-col size="auto" class="review-trash">
+                <ion-button fill="clear" (click)="deleteReview(review._id)">
+                  <ion-icon slot="icon-only" name="trash"></ion-icon>
+                </ion-button>
+              </ion-col>
+            }
           </ion-row>
         </ion-card-header>
 
@@ -112,9 +192,9 @@
   <h1 class="centered-template" *ngIf="location && !location.reviews?.length"><strong>No hay comentarios disponibles</strong></h1>
 </ion-content>
 
-<ng-template #loadingTpl class="centered-template">
+<ng-template #loadingTpl>
   <ion-spinner name="crescent"></ion-spinner>
-  <p>Cargando...</p>
+  <p class="centered-template"> Cargando...</p>
 </ng-template>
 
 <ng-template #errorTpl class="centered-template">

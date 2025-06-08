@@ -15,5 +15,5 @@ export interface LongLocation {
   reviews: Review[];
 }
 export interface coords{
-  coordinates: Number[];
+  coordinates: number[];
 }

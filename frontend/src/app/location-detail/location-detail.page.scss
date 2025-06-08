@@ -32,13 +32,21 @@
   color: #666;
   font-style: italic;
 }
-
+.review-trash ion-button {
+  --background: transparent;
+  --box-shadow: none;
+  --border-width: 0;
+}
 .review-rating ion-icon {
   color: #fbc02d;
   font-size: 1.2rem;
   margin-left: 2px;
 }
-
+.review-trash ion-icon{
+  color: red;
+  font-size: 3rem;
+  margin-left: 20px;
+}
 .review-text {
   font-size: 1rem;
   color: #333;
@@ -60,4 +68,20 @@ ion-list {
   margin: 0 auto;
   width: auto !important;
   max-width: 20%;
+}
+.image-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+ion-item {
+  --background: transparent;
+  --box-shadow: none;
+  --border-width: 0;
+}
+
+.location-image {
+  max-width: 200px;
+  height: auto;
 }

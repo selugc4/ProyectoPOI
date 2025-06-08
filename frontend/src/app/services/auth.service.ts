@@ -31,4 +31,11 @@ export class AuthService {
   async getCurrentUser(): Promise<User | null> {
     return firstValueFrom(this.user$);
   }
+  async getFirebaseIdToken(): Promise<string | null> {
+    const user = await firstValueFrom(this.user$);
+    if (user) {
+      return user.getIdToken();
+    }
+    return null;
+  }
 }

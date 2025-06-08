@@ -2,8 +2,15 @@ const request = require('supertest');
 const mongoose = require('mongoose');
 const app = require('../app');
 const Loc = mongoose.model('Location');
-const { dbURI } = require('../environment/environment');
+const { dbURI, firebaseConfig} = require('../environment/environment');
+const { initializeApp } = require('firebase/app');
+const { getAuth, signInWithEmailAndPassword } = require('firebase/auth');
+const jwt = require('jsonwebtoken');
+const { JWT_SECRET} = require('../environment/environment');
 
+const firebaseApp = initializeApp(firebaseConfig);
+const auth = getAuth(firebaseApp);
+let customJwt;
 let createdLocationId = null;
 let createdReviewId = null;
 
@@ -12,6 +19,9 @@ beforeAll(async () => {
     useNewUrlParser: true,
     useUnifiedTopology: true
   });
+  const userCredential = await signInWithEmailAndPassword(auth, 'paco123@gmail.com', 'contraseña');
+  const firebaseUser = userCredential.user;
+  customJwt = jwt.sign({ uid: firebaseUser.uid }, JWT_SECRET, { expiresIn: '1h' });
   const location = await Loc.create({
     name: 'Review Location Test',
     address: 'Somewhere 123',
@@ -74,12 +84,14 @@ describe('Review routes', () => {
   test('DELETE /locations/:locationid/reviews/:reviewid - éxito', async () => {
     await request(app)
       .delete(`/locations/${createdLocationId}/reviews/${createdReviewId}`)
+      .set('Authorization', `Bearer ${customJwt}`)
       .expect(204);
   });
 
   test('DELETE /locations/:locationid/reviews/:reviewid - error (review no encontrada)', async () => {
     await request(app)
       .delete(`/locations/${createdLocationId}/reviews/000000000000000000000000`)
+      .set('Authorization', `Bearer ${customJwt}`)
       .expect(404);
   });
 });

@@ -4,7 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonCard, IonCardHeader, IonCardContent, IonCardTitle} from '@ionic/angular/standalone';
 import { ShortLocation } from '../models/short-location';
 import { LocationsService } from '../services/locations.service';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-list',
@@ -22,16 +23,24 @@ export class ListPage implements OnInit {
 
   ngOnInit() {
     this.getAllLocations();
-  }
-  getAllLocations() {
-      this.locationsService.getAllLocations().subscribe({
-        next: (data) => {
-          this.locations = data;
-        },
-        error: (err) => {
-          console.error('Error al cargar locations:', err);
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe(event => {
+        const currentRoute = (event as NavigationEnd).url;
+        if (!currentRoute.startsWith('/list')) {
+          this.getAllLocations();
         }
       });
+  }
+  getAllLocations() {
+    this.locationsService.getAllLocations().subscribe({
+      next: (data) => {
+        this.locations = data;
+      },
+      error: (err) => {
+        console.error('Error al cargar locations:', err);
+      }
+    });
   }
   openLocationDetail(id: string) {
     this.router.navigate(['/location-detail', id]);

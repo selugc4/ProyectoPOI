@@ -19,5 +19,6 @@ bootstrapApplication(AppComponent, {
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideFirestore(() => getFirestore()),
     provideAuth(() => getAuth()),
+    provideRouter(routes, withPreloading(PreloadAllModules))
   ],
 });
