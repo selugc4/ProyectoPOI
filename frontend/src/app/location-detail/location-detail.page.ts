@@ -168,18 +168,16 @@ get ownCoordsString(): string {
     });
     await toast.present();
   }
-  deleteReview(reviewId: string) {
-    this.locationsService.deleteReview(this.locationId, reviewId).subscribe({
-      next: (response) => {
-        console.log('Review eliminada:', response);
-        this.showToast('Comentario eliminado con éxito');
-        this.fetchLocation();
-      },
-      error: (err) => {
-        console.error('Error al eliminar review:', err);
-        this.showToast('Error al eliminar comentario', 'danger');
-      }
-    });
+  async deleteReview(reviewId: string) {
+    try {
+      const response = await this.locationsService.deleteReview(this.locationId, reviewId);
+      console.log('Review eliminada:', response);
+      this.showToast('Comentario eliminado con éxito');
+      this.fetchLocation();
+    } catch (err) {
+      console.error('Error al eliminar review:', err);
+      this.showToast('Error al eliminar comentario', 'danger');
+    }
   }
   toggleEditing() {
     this.editing = !this.editing;
@@ -213,7 +211,7 @@ get ownCoordsString(): string {
     return true;
   }
 
-  saveLocation() {
+  async saveLocation() {
     const locationToSend: LocationToSend = {
       name: this.location.name,
       address: this.location.address,
@@ -233,29 +231,25 @@ get ownCoordsString(): string {
       this.showToast('Por favor completa todos los campos correctamente', 'warning');
       return;
     }
-    console.log('Guardando ubicación:', locationToSend);
-    this.locationsService.updateLocation(locationToSend, this.location._id).subscribe({
-      next: () => {
-        this.showToast('Ubicación guardada con éxito');
-        this.editing = false;
-        this.fetchLocation();
-      },
-      error: err => {
-        this.showToast('Error al guardar la ubicación', 'danger');
-        console.error(err);
-      }
-    });
+    try {
+      console.log('Guardando ubicación:', locationToSend);
+      await this.locationsService.updateLocation(locationToSend, this.location._id);
+      this.showToast('Ubicación guardada con éxito');
+      this.editing = false;
+      this.fetchLocation();
+    } catch (err) {
+      this.showToast('Error al guardar la ubicación', 'danger');
+      console.error(err);
+    }
   }
-  deleteLocation() {
-    this.locationsService.deleteLocation(this.locationId).subscribe({
-      next: () => {
-        this.showToast('Ubicación eliminada con éxito');
-        this.router.navigate(['']);
-      },
-      error: (err) => {
-        console.error('Error al eliminar ubicación:', err);
-        this.showToast('Error al eliminar ubicación', 'danger');
-      }
-    });
+  async deleteLocation() {
+    try {
+      await this.locationsService.deleteLocation(this.locationId);
+      this.showToast('Ubicación eliminada con éxito');
+      this.router.navigate(['']);
+    } catch (err) {
+      console.error('Error al eliminar ubicación:', err);
+      this.showToast('Error al eliminar ubicación', 'danger');
+    }
   }
 }

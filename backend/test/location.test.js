@@ -10,6 +10,7 @@ const { JWT_SECRET} = require('../environment/environment');
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
 let customJwt;
+let firebaseToken;
 beforeAll(async () => {
   await mongoose.connect(dbURI, {
     useNewUrlParser: true,
@@ -17,6 +18,7 @@ beforeAll(async () => {
   });
   const userCredential = await signInWithEmailAndPassword(auth, 'paco123@gmail.com', 'contraseña');
   const firebaseUser = userCredential.user;
+  firebaseToken = await firebaseUser.getIdToken();
   customJwt = jwt.sign({ uid: firebaseUser.uid }, JWT_SECRET, { expiresIn: '1h' });
 });
 
@@ -201,4 +203,22 @@ describe('Rutas /locations', () => {
       .get(`/locations/${fakeId}`)
       .expect(404);
   });
+  test('POST /login - login con token Firebase real', () => {
+    return request(app)
+      .post('/login')
+      .send({ firebaseToken: firebaseToken })
+      .expect(200)
+      .then(res => {
+        expect(res.body).toHaveProperty('token');
+      });
+  });
+test('POST /login - error por token Firebase inválido', () => {
+  return request(app)
+    .post('/login')
+    .send({ firebaseToken: 'token_invalido_123' }) 
+    .expect(401)
+    .then(res => {
+      expect(res.body).toHaveProperty('message', 'Token Firebase inválido');
+    });
+});
 });

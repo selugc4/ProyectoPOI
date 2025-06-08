@@ -11,7 +11,7 @@ router.delete('/locations/:locationid', authorizeJWT, ctrlLocations.locationsDel
 router.put('/locations/:locationid', authorizeJWT, ctrlLocations.locationsUpdateOne);
 router.get('/locationsApi/', authorizeJWT, ctrlLocations.foursquareSearch);
 router.get('/locations/:locationid', ctrlLocations.locationById);
-
+router.post('/login', ctrlLocations.loginWithFirebaseToken);
 router.get('/locations/:locationid/reviews', ctrlReviews.getReviewsByLocationId);
 router.post('/locations/:locationid/reviews', ctrlReviews.addReview);
 router.delete('/locations/:locationid/reviews/:reviewid', authorizeJWT, ctrlReviews.deleteReview);

@@ -1,7 +1,16 @@
 const mongoose = require('mongoose');
 const Loc = mongoose.model('Location');
 const axios = require('axios');
+const jwt = require('jsonwebtoken');
 const { apiKey } = require('../environment/environment');
+const { JWT_SECRET } = require('../environment/environment');
+const fireBase = require('../environment/storeapp2-fc3a4-firebase-adminsdk-fbsvc-52b535f6df.json');
+const admin = require('firebase-admin');
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(fireBase)
+  });
+}
 
 const sendJSONresponse = (res, status, content) => {
   res.status(status);
@@ -262,6 +271,31 @@ const foursquareSearch = async (req, res) => {
     sendJSONresponse(res, 500, { message: 'Error al obtener datos desde Foursquare.', error: err });
   }
 };
+const loginWithFirebaseToken = async (req, res) => {
+  const { firebaseToken } = req.body;
+
+  if (!firebaseToken) {
+    return res.status(400).json({ message: 'Falta el token de Firebase' });
+  }
+
+  try {
+    // Verifica el token de Firebase (ID Token)
+    const decodedToken = await admin.auth().verifyIdToken(firebaseToken);
+    
+    // Aquí puedes acceder a datos del usuario, por ejemplo:
+    const uid = decodedToken.uid;
+    const email = decodedToken.email;
+
+    // Genera tu JWT con la info que necesites, por ejemplo el UID de Firebase
+    const customJwt = jwt.sign({ uid, email }, JWT_SECRET, { expiresIn: '1h' });
+
+    // Devuelve el JWT propio al cliente
+    return res.status(200).json({ token: customJwt });
+  } catch (error) {
+    console.error('Error verificando token Firebase:', error);
+    return res.status(401).json({ message: 'Token Firebase inválido' });
+  }
+};
 module.exports = {
   locationsReadByNameDatePlace,
   locationById,
@@ -269,5 +303,6 @@ module.exports = {
   locationsCreateMany,
   locationsDeleteOne,
   locationsUpdateOne,
-  foursquareSearch
+  foursquareSearch,
+  loginWithFirebaseToken
 };
