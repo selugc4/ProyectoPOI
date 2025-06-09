@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-searchbar class="prompt" [(ngModel)]="city" placeholder="Buscar ciudad" ngDefaultControl></ion-searchbar>
+  <ion-searchbar class="prompt" [(ngModel)]="city" placeholder="Buscar ciudad"></ion-searchbar>
   <ion-button class="boton" expand="block" (click)="search()" [disabled]="!city || loading">
     {{ loading ? 'Buscando...' : 'Buscar Ruta' }}
   </ion-button>
