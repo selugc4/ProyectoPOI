@@ -41,7 +41,8 @@ jobs:
           npm install -g http-server
           http-server ./www -p 8080 &
           npx wait-on http://localhost:8080
-          npx cypress run --config baseUrl=http://localhost:8080
+          npx cypress run --component --browser chrome --config baseUrl=http://localhost:8080
+          npx cypress run --component --browser firefox --config baseUrl=http://localhost:8080
 
   build-backend:
     runs-on: ubuntu-latest
