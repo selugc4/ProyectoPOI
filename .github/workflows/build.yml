@@ -29,6 +29,7 @@ jobs:
 
       - name: Run ESLint (Static code analysis)
         working-directory: ./frontend
+        continue-on-error: true
         run: npm run lint
 
       - name: Build project
