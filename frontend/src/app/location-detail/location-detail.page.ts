@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonList, IonListHeader, IonSpinner, IonCol, IonIcon, IonRow, IonButton, IonItem, IonLabel, IonInput} from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonList, IonListHeader, IonSpinner, IonCol, IonIcon, IonRow, IonButton, IonItem, IonLabel, IonInput, IonTextarea} from '@ionic/angular/standalone';
 import { LongLocation } from '../models/long-location';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { LocationsService } from '../services/locations.service';
@@ -21,7 +21,7 @@ import { LocationToPut } from '../models/location-to-put';
   templateUrl: './location-detail.page.html',
   styleUrls: ['./location-detail.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonList, IonListHeader, IonSpinner, IonCol, IonIcon, IonRow, IonButton, IonItem, IonLabel, IonInput]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonList, IonListHeader, IonSpinner, IonCol, IonIcon, IonRow, IonButton, IonItem, IonLabel, IonInput, IonTextarea]
 })
 export class LocationDetailPage implements OnInit {
   locationId: string = '';

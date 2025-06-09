@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { LocationsService } from '../services/locations.service';
 import { RouteResponse } from '../models/locations-groq';
-import { IonButton, IonText, IonItem, IonList, IonLabel} from '@ionic/angular/standalone';
+import { IonButton, IonText, IonItem, IonList, IonLabel, IonSearchbar} from '@ionic/angular/standalone';
 import { AuthService } from '../services/auth.service';
 
 
@@ -13,7 +13,7 @@ import { AuthService } from '../services/auth.service';
   templateUrl: './groq.page.html',
   styleUrls: ['./groq.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButton, IonText, IonItem, IonList, IonLabel]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButton, IonText, IonItem, IonList, IonLabel, IonSearchbar]
 })
 export class GroqPage implements OnInit {
   city = '';
