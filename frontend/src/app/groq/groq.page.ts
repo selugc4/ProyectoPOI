@@ -3,8 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { LocationsService } from '../services/locations.service';
-import { LocationsGroq } from '../models/locations-groq';
+import { RouteResponse } from '../models/locations-groq';
 import { IonButton, IonText, IonItem, IonList, IonLabel} from '@ionic/angular/standalone';
+import { AuthService } from '../services/auth.service';
+
 
 @Component({
   selector: 'app-groq',
@@ -15,11 +17,11 @@ import { IonButton, IonText, IonItem, IonList, IonLabel} from '@ionic/angular/st
 })
 export class GroqPage implements OnInit {
   city = '';
-  userId = 'user123';
-  locations: LocationsGroq[] = [];
+  locations: RouteResponse | undefined;
   loading = false;
   error = '';
   locationServices: LocationsService = inject(LocationsService);
+  authService: AuthService = inject(AuthService);
   constructor() { }
 
   ngOnInit() {
@@ -27,9 +29,10 @@ export class GroqPage implements OnInit {
   async search() {
     this.error = '';
     this.loading = true;
-    this.locations = [];
     try {
-      this.locations = await this.locationServices.getRecommendedRoute(this.city, this.userId) || [];
+      const user = await this.authService.getCurrentUser();
+      this.locations = await this.locationServices.getRecommendedRoute(this.city, user?.uid ?? '') || [];
+      console.log(this.locations)
     } catch (err) {
       this.error = 'No se pudo obtener la ruta';
     }

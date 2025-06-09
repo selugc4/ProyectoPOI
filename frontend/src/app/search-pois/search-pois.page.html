@@ -12,17 +12,17 @@
         <form class="search-container" (submit)="onSearch(); $event.preventDefault();">
           <ion-item>
             <ion-label position="stacked">Nombre</ion-label>
-            <ion-input type="text" [(ngModel)]="searchName" ngDefaultControl name="searchName"></ion-input>
+            <ion-input class="name" type="text" [(ngModel)]="searchName" ngDefaultControl name="searchName"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label position="stacked">Latitud</ion-label>
-            <ion-input type="number" [(ngModel)]="searchLat" ngDefaultControl name="searchLat" step="any"></ion-input>
+            <ion-input class="lat" type="number" [(ngModel)]="searchLat" ngDefaultControl name="searchLat" step="any"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label position="stacked">Longitud</ion-label>
-            <ion-input type="number" [(ngModel)]="searchLng" ngDefaultControl name="searchLng" step="any"></ion-input>
+            <ion-input class="lng" type="number" [(ngModel)]="searchLng" ngDefaultControl name="searchLng" step="any"></ion-input>
           </ion-item>
 
           <ion-button expand="block" type="submit" [disabled]="loading">
@@ -70,7 +70,7 @@
           </ion-list>
           <p *ngIf="addedPois.length === 0">No hay POIs añadidos aún.</p>
           <div *ngIf="addedPois.length !== 0" class="ion-text-center ion-margin-top">
-            <ion-button expand="block" color="primary" (click)="guardarPois()" [disabled]="addedPois.length === 0 || saving">
+            <ion-button class="guardado" expand="block" color="primary" (click)="guardarPois()" [disabled]="addedPois.length === 0 || saving">
               {{ saving ? 'Guardando...' : 'Guardar todos' }}
             </ion-button>
           </div>

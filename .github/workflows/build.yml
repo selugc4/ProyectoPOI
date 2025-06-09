@@ -30,12 +30,25 @@ jobs:
       - name: Build project
         working-directory: ./frontend
         run: ionic build -- --base-href /ProyectoPOI/
-
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: www
           path: ./frontend/www/
+      - name: Start static server and run Cypress tests
+        working-directory: ./frontend
+        run: |
+          # Instala http-server para servir contenido estático
+          npm install -g http-server
+
+          # Servimos el build en background (puerto 8080)
+          http-server ./www -p 8080 &
+
+          # Esperamos que el servidor arranque
+          npx wait-on http://localhost:8080
+
+          # Ejecutamos Cypress e2e apuntando a nuestro servidor local
+          npx cypress run --config baseUrl=http://localhost:8080
 
   build-backend:
     runs-on: ubuntu-latest

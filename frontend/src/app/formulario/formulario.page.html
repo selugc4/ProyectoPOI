@@ -8,32 +8,33 @@
   <form class="search-container" (ngSubmit)="onSubmit()" #poiForm="ngForm">
     <ion-item>
       <ion-label position="stacked">Nombre</ion-label>
-      <ion-input required [(ngModel)]="location.name" name="name" ngDefaultControl></ion-input>
+      <ion-input class = "name" required [(ngModel)]="location.name" name="name" ngDefaultControl></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label position="stacked">Dirección</ion-label>
-      <ion-input [(ngModel)]="location.address" name="address" ngDefaultControl></ion-input>
+      <ion-input class = "address" [(ngModel)]="location.address" name="address" ngDefaultControl></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label position="stacked">Localidad</ion-label>
-      <ion-input [(ngModel)]="location.locality" name="locality" ngDefaultControl></ion-input>
+      <ion-input class = "locality" [(ngModel)]="location.locality" name="locality" ngDefaultControl></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label position="stacked">Región</ion-label>
-      <ion-input [(ngModel)]="location.region" name="region" ngDefaultControl></ion-input>
+      <ion-input class = "region" [(ngModel)]="location.region" name="region" ngDefaultControl></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label position="stacked">País</ion-label>
-      <ion-input [(ngModel)]="location.country" name="country" ngDefaultControl></ion-input>
+      <ion-input class = "country" [(ngModel)]="location.country" name="country" ngDefaultControl></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label position="stacked">Imagen (URL o Captura)</ion-label>
+      <ion-label position="stacked" name="image">Imagen (URL o Captura)</ion-label>
       <ion-input
         [(ngModel)]="location.image"
+        class = "image"
         name="image"
         [disabled]="imageSource === 'camera'"
         (ionChange)="onImageUrlChange()"
@@ -50,7 +51,7 @@
       <img (load)="onImageLoad()" (error)="onImageError()"class="preview-image" [src]="location.image" style="max-width: 100%; height: auto;" />
     </ion-item>
 
-    <ion-button expand="block" type="submit" [disabled]="loading ||
+    <ion-button class= "boton" expand="block" type="submit" [disabled]="loading ||
     !location.name ||
     !location.address ||
     !location.locality ||

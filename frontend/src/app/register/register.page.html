@@ -18,7 +18,7 @@
 
       <ion-item>
         <ion-label position="stacked">Password</ion-label>
-        <ion-input type="password" formControlName="password" ngDefaultControl></ion-input>
+        <ion-input class="password" type="password" formControlName="password" ngDefaultControl></ion-input>
       </ion-item>
       <ion-text color="danger" *ngIf="registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched">
         La contraseña debe tener al menos 6 caracteres.

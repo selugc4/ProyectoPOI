@@ -10,17 +10,17 @@
       <h3><strong>Inicia sesión</strong></h3>
       <ion-item class="transparent-form" >
         <ion-label position="stacked">Email</ion-label>
-        <ion-input type="email" formControlName="email" class="transparent-form" ngDefaultControl></ion-input>
+        <ion-input class= "email" type="email" formControlName="email" class="transparent-form" ngDefaultControl></ion-input>
       </ion-item>
-      <ion-text color="danger" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+      <ion-text class="mailerror" color="danger" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
         Ingresa un correo válido.
       </ion-text>
 
       <ion-item>
         <ion-label position="stacked">Password</ion-label>
-        <ion-input type="password" formControlName="password" ngDefaultControl></ion-input>
+        <ion-input class= "password" type="password" formControlName="password" ngDefaultControl></ion-input>
       </ion-item>
-      <ion-text color="danger" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+      <ion-text class= "error" color="danger" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
         La contraseña debe tener al menos 6 caracteres.
       </ion-text>
       <ion-button class="button2" expand="full" type="submit" [disabled]="loginForm.invalid">Login</ion-button>

@@ -1,0 +1,57 @@
+.route-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; // Centra todo horizontalmente
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center; // Centra cada step
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.step-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.step-number {
+  background: #3880ff;
+  color: white;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  text-align: center;
+  line-height: 28px;
+  font-size: 14px;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.step-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 90%;
+}
+
+.step-name {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.step-address {
+  font-size: 14px;
+  color: #666;
+}
+
+.arrow {
+  font-size: 24px;
+  color: #aaa;
+  margin: 8px 0;
+}

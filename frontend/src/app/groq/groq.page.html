@@ -5,21 +5,23 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-searchbar [(ngModel)]="city" placeholder="Buscar ciudad" ngDefaultControl></ion-searchbar>
-  <ion-button expand="block" (click)="search()" [disabled]="!city || loading">
+  <ion-searchbar class="prompt" [(ngModel)]="city" placeholder="Buscar ciudad" ngDefaultControl></ion-searchbar>
+  <ion-button class="boton" expand="block" (click)="search()" [disabled]="!city || loading">
     {{ loading ? 'Buscando...' : 'Buscar Ruta' }}
   </ion-button>
 
   <ion-text color="danger" *ngIf="error">{{ error }}</ion-text>
 
-  <div *ngIf="locations.length">
-    <ion-list>
-      <ion-item *ngFor="let loc of locations; index as i">
-        <ion-label>
-          <h2>{{ i + 1 }}. {{ loc.name }}</h2>
-          <p>{{ loc.address }}</p>
-        </ion-label>
-      </ion-item>
-    </ion-list>
+  <div *ngIf="locations?.route?.length" class="route-container">
+    <div *ngFor="let loc of locations?.route; let i = index" class="step">
+      <div class="step-content">
+        <div class="step-number">{{ i + 1 }}</div>
+        <div class="step-info">
+          <div class="step-name">{{ loc.name }}</div>
+          <div class="step-address">{{ loc.address }}</div>
+        </div>
+      </div>
+      <div class="arrow" *ngIf="i < (locations?.route?.length || 0)">↓</div>
+    </div>
   </div>
 </ion-content>

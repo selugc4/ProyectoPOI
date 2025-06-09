@@ -56,7 +56,7 @@ export class SearchPage implements OnInit {
       },
       error: err => {
         if( err.status === 404) {
-          this.errorMessage = 'Error al buscar: No se puede encontrar el POI con el parámetro proporcionados';
+          this.errorMessage = 'Error al buscar: No se puede encontrar el POI con el parámetro proporcionado';
         }
         else {
           this.errorMessage = 'Error al buscar: La base de datos no está disponible';
