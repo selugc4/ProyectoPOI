@@ -17,11 +17,4 @@ export default defineConfig({
     },
     specPattern: "**/*.cy.ts",
   },
-  e2e: {
-    supportFile: false,
-    baseUrl: 'https://selugc4.github.io/ProyectoPOI',
-    chromeWebSecurity: false,
-    setupNodeEvents(on, config) {
-    },
-  },
 });
