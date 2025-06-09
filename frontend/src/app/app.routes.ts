@@ -30,10 +30,15 @@ export const routes: Routes = [
         loadComponent: () => import('./location-detail/location-detail.page').then( m => m.LocationDetailPage)
       },
       {
+        path: 'search-pois',
+        loadComponent: () => import('./search-pois/search-pois.page').then( m => m.SearchPOIsPage)
+      },
+      {
         path: '',
         redirectTo: 'search',
         pathMatch: 'full',
       },
     ]
   },
+
 ];

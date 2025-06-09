@@ -28,7 +28,8 @@ const locationSchema = new mongoose.Schema({
     },
     reviews: [reviewSchema],
     image: String,
-    date: {type: Date, default: Date.now}
+    date: {type: Date, default: Date.now},
+    createdBy : String
 });
 
 locationSchema.index({locationCoords: '2dsphere'});

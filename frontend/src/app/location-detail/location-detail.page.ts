@@ -14,7 +14,7 @@ import { ToastController } from '@ionic/angular';
 import { AuthService } from '../services/auth.service';
 import { ReviewToSendLogged } from '../models/review-to-send-logged';
 import { PhotoService } from '../services/photo.service';
-import { LocationToSend } from '../models/location-to-send';
+import { LocationToPut } from '../models/location-to-put';
 
 @Component({
   selector: 'app-location-detail',
@@ -212,7 +212,7 @@ get ownCoordsString(): string {
   }
 
   async saveLocation() {
-    const locationToSend: LocationToSend = {
+    const locationToSend: LocationToPut = {
       name: this.location.name,
       address: this.location.address,
       locality: this.location.locality,

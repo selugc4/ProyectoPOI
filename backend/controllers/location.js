@@ -100,6 +100,7 @@ const locationsCreate = (req, res) => {
       coordinates: [parseFloat(req.body.Ownlng), parseFloat(req.body.Ownlat)]
     },
     image: req.body.image,
+    createdBy: req.body.createdBy
   })
   .then(location => sendJSONresponse(res, 201, location))
   .catch(err => sendJSONresponse(res, 500, err));
@@ -122,7 +123,8 @@ const locationsCreateMany = (req, res) => {
       type: 'Point',
       coordinates: [parseFloat(loc.Ownlng), parseFloat(loc.Ownlat)]
     },
-    image: loc.image
+    image: loc.image,
+    createdBy: loc.createdBy
   }));
   Loc.insertMany(docsToInsert)
   .then(docs => {

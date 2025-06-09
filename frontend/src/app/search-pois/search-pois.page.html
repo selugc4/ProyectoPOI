@@ -1,0 +1,81 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Buscador de ubicaciones</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-grid>
+    <ion-row>
+      <!-- Columna buscador + resultados -->
+      <ion-col size="6">
+        <form class="search-container" (submit)="onSearch(); $event.preventDefault();">
+          <ion-item>
+            <ion-label position="stacked">Nombre</ion-label>
+            <ion-input type="text" [(ngModel)]="searchName" ngDefaultControl name="searchName"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Latitud</ion-label>
+            <ion-input type="number" [(ngModel)]="searchLat" ngDefaultControl name="searchLat" step="any"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Longitud</ion-label>
+            <ion-input type="number" [(ngModel)]="searchLng" ngDefaultControl name="searchLng" step="any"></ion-input>
+          </ion-item>
+
+          <ion-button expand="block" type="submit" [disabled]="loading">
+            {{ loading ? 'Buscando...' : 'Buscar' }}
+          </ion-button>
+        </form>
+
+        <ion-text color="danger" *ngIf="errorMessage" class="ion-margin-top">
+          {{ errorMessage }}
+        </ion-text>
+        <ion-list *ngIf="results.length > 0" class="results-list">
+          @for(loc of results; track loc.fsq_id) {
+            <ion-card class="location-card">
+              <ion-row>
+                <ion-col size="5">
+                  <img [src]="loc.image || 'assets/LocationDefault.png'" class="location-image"><img>
+                </ion-col>
+                <ion-col size="7" class="location-details">
+                  <ion-card-title>{{ loc.name }}</ion-card-title>
+                  <p class="address">{{ loc.address || 'Dirección no disponible'  }}</p>
+                  <p class="locality">{{ loc.locality }}</p>
+                  <p class="country">{{ loc.country }}</p>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="12" class="ion-text-right">
+                  <ion-button size="small" (click)="addPoi(loc)">Añadir</ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-card>
+          }
+        </ion-list>
+      </ion-col>
+      <ion-col size="6" class="added-pois-list">
+        <h2>POIs añadidos</h2>
+        <div>
+          <ion-list class="added-pois-item" *ngIf="addedPois.length > 0">
+            <ion-item class="added-pois-item" *ngFor="let poi of addedPois; let i = index">
+              <ion-label>
+                <h3>{{ poi.name }}</h3>
+                <p>{{ poi.address || 'Dirección no disponible' }}</p>
+              </ion-label>
+              <ion-button color="danger" size="small" slot="end" (click)="removePoi(i)">Eliminar</ion-button>
+            </ion-item>
+          </ion-list>
+          <p *ngIf="addedPois.length === 0">No hay POIs añadidos aún.</p>
+          <div *ngIf="addedPois.length !== 0" class="ion-text-center ion-margin-top">
+            <ion-button expand="block" color="primary" (click)="guardarPois()" [disabled]="addedPois.length === 0 || saving">
+              {{ saving ? 'Guardando...' : 'Guardar todos' }}
+            </ion-button>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

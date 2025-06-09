@@ -1,6 +1,6 @@
 import { Review } from "./review";
 
-export interface LocationToSend {
+export interface LocationToPut {
     name: string;
     address: string;
     locality: string;
@@ -12,6 +12,6 @@ export interface LocationToSend {
     Otherlat: number;
     Ownlng: number;
     Ownlat: number;
+    date: string;
     reviews: Review[];
-    createdBy: string;
 }
