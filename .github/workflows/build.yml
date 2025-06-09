@@ -31,7 +31,11 @@ jobs:
         working-directory: ./frontend
         continue-on-error: true
         run: npm run lint
-
+      - name: Upload ESLint report
+        uses: actions/upload-artifact@v4
+        with:
+          name: eslint-report
+          path: ./frontend/lint-results.xml
       - name: Build project
         working-directory: ./frontend
         run: ionic build -- --base-href /ProyectoPOI/
@@ -49,6 +53,11 @@ jobs:
           npx wait-on http://localhost:8080
           npx cypress run --component --browser chrome --reporter junit --reporter-options "mochaFile=results/test-results-[hash].xml" --config baseUrl=http://localhost:8080
           npx cypress run --component --browser firefox --config baseUrl=http://localhost:8080
+      - name: Upload Cypress test reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-test-reports
+          path: ./frontend/results/      
 
   build-backend:
     runs-on: ubuntu-latest
