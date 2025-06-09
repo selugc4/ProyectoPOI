@@ -12,6 +12,5 @@ export interface LocationToSend {
     Otherlat: number;
     Ownlng: number;
     Ownlat: number;
-    reviews: Review[];
     createdBy: string;
 }

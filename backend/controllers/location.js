@@ -6,6 +6,9 @@ const { apiKey } = require('../environment/environment');
 const { JWT_SECRET } = require('../environment/environment');
 const fireBase = require('../environment/storeapp2-fc3a4-firebase-adminsdk-fbsvc-52b535f6df.json');
 const admin = require('firebase-admin');
+const { ChatGroq } = require('@langchain/groq');
+const POIRoute = require('../services/routeAI');
+const {GROQ_API_KEY} = require('../environment/environment');
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert(fireBase)
@@ -298,6 +301,59 @@ const loginWithFirebaseToken = async (req, res) => {
     return res.status(401).json({ message: 'Token Firebase inválido' });
   }
 };
+const locationsByUserAndCity = (req, res) => {
+  const { userId, city } = req.query;
+
+  if (!userId) {
+    return sendJSONresponse(res, 400, { message: 'El parámetro userId es obligatorio' });
+  }
+
+  if (!city) {
+    return sendJSONresponse(res, 400, { message: 'El parámetro city es obligatorio' });
+  }
+
+  // Hacemos búsqueda insensible a mayúsculas y que coincida en locality o region
+  const cityRegex = new RegExp(city, 'i');
+
+  Loc.find({
+    createdBy: userId,
+    $or: [
+      { locality: cityRegex },
+      { region: cityRegex }
+    ]
+  }).exec()
+    .then(locations => {
+      if (!locations || locations.length === 0) {
+        return sendJSONresponse(res, 404, { message: 'No se encontraron locations para ese usuario y ciudad' });
+      }
+      sendJSONresponse(res, 200, locations);
+    })
+    .catch(err => {
+      sendJSONresponse(res, 500, { message: 'Error al buscar locations', error: err });
+    });
+};
+const recommendLocation = async (req, res) => {
+  try {
+    const { city, locations } = req.body;
+
+    if (!city || !locations || !Array.isArray(locations) || locations.length === 0) {
+      return res.status(400).json({ message: 'Falta city o locations no es un array válido o está vacío' });
+    }
+
+    const model = new ChatGroq({
+      apiKey: GROQ_API_KEY,
+      model: 'deepseek-r1-distill-llama-70b', // tu modelo Groq
+    });
+
+    const poiRoute = new POIRoute(model);
+    const recommendation = await poiRoute.getLocationRecommendation({ city, locations });
+
+    return res.status(200).json(recommendation);
+  } catch (error) {
+    console.error('Error en recommendLocation:', error);
+    return res.status(500).json({ message: 'Error generando recomendación', error: error.message });
+  }
+};
 module.exports = {
   locationsReadByNameDatePlace,
   locationById,
@@ -306,5 +362,7 @@ module.exports = {
   locationsDeleteOne,
   locationsUpdateOne,
   foursquareSearch,
-  loginWithFirebaseToken
+  loginWithFirebaseToken,
+  locationsByUserAndCity,
+  recommendLocation
 };

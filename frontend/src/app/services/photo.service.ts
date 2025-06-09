@@ -8,14 +8,14 @@ import { Geolocation } from '@capacitor/geolocation';
 export class PhotoService {
   public async takePicture() {
     try {
-      const image = await Camera.getPhoto({
-        quality: 100,
+      const photo = await Camera.getPhoto({
+        quality: 90,
         allowEditing: false,
-        resultType: CameraResultType.Uri
+        resultType: CameraResultType.Base64,
       });
-      return image;
+      return photo.base64String ? `data:image/jpeg;base64,${photo.base64String}` : null;
     } catch (error) {
-      console.error('Error al capturar la foto:', error);
+      console.error('Error al tomar foto:', error);
       return null;
     }
   }

@@ -9,5 +9,6 @@ module.exports = {
     messagingSenderId: "71409018255",
     appId: "1:71409018255:web:73d46fb5fa4fabe2e097fa"
   },
-  JWT_SECRET:"fhR7!8cN2@kPz9L$wQxTr*V#gYs1"
+  JWT_SECRET:"fhR7!8cN2@kPz9L$wQxTr*V#gYs1",
+  GROQ_API_KEY :'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'
 };

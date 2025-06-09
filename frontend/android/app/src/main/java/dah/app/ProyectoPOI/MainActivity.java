@@ -1,4 +1,4 @@
-package com.dah.POIProject;
+package dah.app.ProyectoPOI;
 
 import com.getcapacitor.BridgeActivity;
 

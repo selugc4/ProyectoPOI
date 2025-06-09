@@ -34,11 +34,16 @@ export const routes: Routes = [
         loadComponent: () => import('./search-pois/search-pois.page').then( m => m.SearchPOIsPage)
       },
       {
+        path: 'formulario',
+        loadComponent: () => import('./formulario/formulario.page').then( m => m.FormularioPage)
+      },
+      {
         path: '',
         redirectTo: 'search',
         pathMatch: 'full',
       },
     ]
   },
+
 
 ];

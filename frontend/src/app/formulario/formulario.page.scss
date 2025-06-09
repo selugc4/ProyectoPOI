@@ -1,0 +1,22 @@
+.search-container{
+  text-align: center;
+  max-width: 60%;
+  margin: 2rem auto;
+  padding: 1.5rem 2rem;
+  background: #d0e7ff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.search-container ion-item {
+  --background: transparent;
+}
+.preview-image {
+  margin-top: 10px;
+  max-height: 150px;
+  max-width: 100%;
+  width: auto;
+  object-fit: cover;
+  border-radius: 8px;
+}

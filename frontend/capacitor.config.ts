@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.dah.POIProject',
-  appName: 'POIProject',
+  appId: 'dah.app.ProyectoPOI',
+  appName: 'ProyectoPOI',
   webDir: 'www'
 };
 

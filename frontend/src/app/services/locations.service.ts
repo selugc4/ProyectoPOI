@@ -178,4 +178,26 @@ export class LocationsService {
     const headers = customJwt ? new HttpHeaders().set('Authorization', `Bearer ${customJwt}`) : undefined;
     return await firstValueFrom(this.http.post(url, locations, { headers }));
   }
+  async insert(locations: LocationToSend){
+    const firebaseToken = await this.authService.getFirebaseIdToken();
+
+    if (!firebaseToken) {
+      throw new Error('No se pudo obtener el token de Firebase');
+    }
+    const loginUrl = `https://twm-a0gahqe6exa7fxh6.westeurope-01.azurewebsites.net/login`;
+    const loginHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const loginBody = { firebaseToken };
+
+    const loginResponse: any = await firstValueFrom(
+      this.http.post(loginUrl, loginBody, { headers: loginHeaders })
+    );
+
+    const customJwt = loginResponse.token;
+    if (!customJwt) {
+      throw new Error('No se recibió token personalizado');
+    }
+    const url = `${this.baseUrl}`;
+    const headers = customJwt ? new HttpHeaders().set('Authorization', `Bearer ${customJwt}`) : undefined;
+    return await firstValueFrom(this.http.post(url, locations, { headers }));
+  }
 }
