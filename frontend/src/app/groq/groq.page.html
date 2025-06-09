@@ -1,0 +1,25 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Groq</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-searchbar [(ngModel)]="city" placeholder="Buscar ciudad" ngDefaultControl></ion-searchbar>
+  <ion-button expand="block" (click)="search()" [disabled]="!city || loading">
+    {{ loading ? 'Buscando...' : 'Buscar Ruta' }}
+  </ion-button>
+
+  <ion-text color="danger" *ngIf="error">{{ error }}</ion-text>
+
+  <div *ngIf="locations.length">
+    <ion-list>
+      <ion-item *ngFor="let loc of locations; index as i">
+        <ion-label>
+          <h2>{{ i + 1 }}. {{ loc.name }}</h2>
+          <p>{{ loc.address }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>

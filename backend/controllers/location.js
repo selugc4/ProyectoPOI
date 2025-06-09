@@ -342,7 +342,7 @@ const recommendLocation = async (req, res) => {
 
     const model = new ChatGroq({
       apiKey: GROQ_API_KEY,
-      model: 'deepseek-r1-distill-llama-70b', // tu modelo Groq
+      model: 'deepseek-r1-distill-llama-70b',
     });
 
     const poiRoute = new POIRoute(model);

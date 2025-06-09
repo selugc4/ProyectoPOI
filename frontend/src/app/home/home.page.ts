@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, ViewWillEnter, IonButton, ToastController, LoadingController} from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { person, search, list, logIn, add, push, logOut, cloudDownload, reorderFour} from 'ionicons/icons';
+import { person, search, list, logIn, add, push, logOut, cloudDownload, reorderFour, gitMerge} from 'ionicons/icons';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 
@@ -27,7 +27,8 @@ export class HomePage implements OnInit {
       push,
       logOut,
       cloudDownload,
-      reorderFour
+      reorderFour,
+      gitMerge
     });
   }
   ngOnInit(): void {

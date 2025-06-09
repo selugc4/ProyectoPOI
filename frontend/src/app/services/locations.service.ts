@@ -9,6 +9,7 @@ import { LocationToPut } from '../models/location-to-put';
 import { AuthService } from './auth.service';
 import { LocationToFS } from '../models/location-FS';
 import { LocationToSend } from '../models/location-to-send';
+import { LocationsGroq } from '../models/locations-groq';
 
 @Injectable({
   providedIn: 'root'
@@ -199,5 +200,12 @@ export class LocationsService {
     const url = `${this.baseUrl}`;
     const headers = customJwt ? new HttpHeaders().set('Authorization', `Bearer ${customJwt}`) : undefined;
     return await firstValueFrom(this.http.post(url, locations, { headers }));
+  }
+  getRecommendedRoute(city: string, userId: string) {
+    const params = new HttpParams()
+      .set('userId', userId)
+      .set('city', city);
+    const locations = this.http.get<LongLocation[]>(`https://twm-a0gahqe6exa7fxh6.westeurope-01.azurewebsites.net/locationsGroq`, { params });
+    return firstValueFrom(this.http.post<LocationsGroq[]>(`https://twm-a0gahqe6exa7fxh6.westeurope-01.azurewebsites.net/ruta`, { city, locations }));
   }
 }

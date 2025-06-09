@@ -38,12 +38,17 @@ export const routes: Routes = [
         loadComponent: () => import('./formulario/formulario.page').then( m => m.FormularioPage)
       },
       {
+        path: 'ruta',
+        loadComponent: () => import('./groq/groq.page').then( m => m.GroqPage)
+      },
+      {
         path: '',
         redirectTo: 'search',
         pathMatch: 'full',
       },
     ]
   },
+
 
 
 ];
